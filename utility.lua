@@ -96,5 +96,70 @@ return {
                 end
             end
         end--]]
+    end,
+    coverSpawn = function()
+        local lobby = workspace.Spawn
+        local targetSpawn = {}
+
+        for _, object in pairs(workspace:GetChildren()) do
+            if object.Name == "SpawnLocation5" then
+                table.insert(targetSpawn, object)
+            end
+        end
+
+        local character = game:GetService("Players").LocalPlayer.Character
+
+        local positionOffsets = {
+            Vector3.new(0, 0, 0),
+            Vector3.new(1, 0, 0),
+            Vector3.new(0, 0, 1),
+            Vector3.new(-1, 0, 0),
+            Vector3.new(0, 0, -1),
+            Vector3.new(1, 0, 1),
+            Vector3.new(1, 0, -1),
+            Vector3.new(-1, 0, 1),
+            Vector3.new(-1, 0, -1)
+        }
+
+        local queuePositions = {}
+        local seats = {}
+
+        for _, tSpawn in pairs(targetSpawn) do
+            for _, position in pairs(positionOffsets) do
+                table.insert(queuePositions, (tSpawn.Position * Vector3.new(1, 0, 1)) + (position * 3) + Vector3.new(0, 40.2, 0))
+            end
+        end
+
+        for _, seat in pairs(workspace.Cinema:GetChildren()) do
+            if seat:IsA("Seat") then
+                table.insert(seats, seat)
+            end
+        end
+
+        character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
+
+        for index, seat in pairs(seats) do
+            if index > #queuePositions then
+                break
+            end
+
+            local targetPos = CFrame.new(queuePositions[index]) * CFrame.Angles(math.rad(180), 0, 0)
+
+            if math.floor(seat.CFrame.X) == math.floor(targetPos.X) then
+                print("sigma")
+
+                continue
+            end
+
+            repeat task.wait() 
+                seat:Sit(character.Humanoid)
+            until character.Humanoid.SeatPart == seat
+
+            workspace.Events.Teleport:FireServer(targetPos)
+
+            repeat task.wait() until math.floor(seat.CFrame.X) == math.floor(targetPos.X)
+        end
+
+        character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
     end
 }
