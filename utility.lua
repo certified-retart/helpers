@@ -143,6 +143,10 @@ return {
                 break
             end
 
+            if seat.Occupied then
+                continue
+            end
+
             local targetPos = CFrame.new(queuePositions[index]) * CFrame.Angles(math.rad(180), 0, 0)
 
             if math.floor(seat.CFrame.X) == math.floor(targetPos.X) then
@@ -153,7 +157,15 @@ return {
 
             repeat task.wait() 
                 seat:Sit(character.Humanoid)
+
+                if seat.Occupied then
+                    break
+                end
             until character.Humanoid.SeatPart == seat
+
+            if seat.Occupied then
+                continue
+            end
 
             workspace.Events.Teleport:FireServer(targetPos)
 
