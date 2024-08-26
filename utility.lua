@@ -149,7 +149,7 @@ return {
 
             local targetPos = CFrame.new(queuePositions[index]) * CFrame.Angles(math.rad(180), 0, 0)
 
-            if math.floor(seat.CFrame.X) == math.floor(targetPos.X) then
+            if math.floor(seat.CFrame.X) == math.floor(targetPos.X) and math.floor(seat.CFrame.Z) == math.floor(targetPos.Z) then
                 print("sigma")
 
                 continue
@@ -169,7 +169,7 @@ return {
 
             workspace.Events.Teleport:FireServer(targetPos)
 
-            repeat task.wait() until math.floor(seat.CFrame.X) == math.floor(targetPos.X)
+            repeat task.wait() until math.floor(seat.CFrame.X) == math.floor(targetPos.X) and math.floor(seat.CFrame.Z) == math.floor(targetPos.Z)
         end
 
         character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
