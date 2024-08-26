@@ -143,7 +143,7 @@ return {
                 break
             end
 
-            if seat.Occupant then
+            if seat.Occupant ~= character.Humanoid then
                 continue
             end
 
@@ -158,12 +158,12 @@ return {
             repeat task.wait() 
                 seat:Sit(character.Humanoid)
 
-                if seat.Occupant then
+                if seat.Occupant ~= character.Humanoid then
                     break
                 end
             until character.Humanoid.SeatPart == seat
 
-            if seat.Occupant then
+            if seat.Occupant ~= character.Humanoid then
                 continue
             end
 
